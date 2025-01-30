@@ -17,7 +17,6 @@ export async function GET(request: NextRequest) {
     [email, password]
   );
 
-  console.log(user);
   if (user.length == 1)
     return NextResponse.json(user[0]);
 
