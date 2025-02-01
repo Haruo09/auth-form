@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
@@ -11,21 +11,36 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { SignInFormSchema, SignInFormData } from '@/lib/SignInFormSchema';
+import { AuthContext } from '@/context/AuthContext';
+import { redirect } from 'next/navigation';
 
 export default function LoginForm() {
-  const [ data, setData ] = useState('');
+  // const [ data, setData ] = useState<SignInFormData | null>(null);
 
   const { 
     register, 
     formState: { errors }, 
     handleSubmit 
-
   } = useForm<SignInFormData>({
     resolver: zodResolver(SignInFormSchema)
   });
 
-  function handleSignIn(formData: SignInFormData) {
-    setData(JSON.stringify(formData));
+  const { signIn } = useContext(AuthContext);
+
+  async function handleSignIn(formData: SignInFormData) {
+    console.log("Formdata:", formData);
+    console.log("Typeof signIn:", typeof signIn);
+
+    const result = signIn(formData);
+
+    if ((await result).message == "fail") {
+      window.alert("Email or password are wrong. Please, try again.")
+    }
+
+    else {
+      redirect('/helloworld');
+    }
+    
   }
 
   return (
@@ -56,9 +71,9 @@ export default function LoginForm() {
 
         </form>
       </Card>
-      <code>
+      {/* <code>
         {data}
-      </code>
+      </code> */}
     </div>
   );
 }
