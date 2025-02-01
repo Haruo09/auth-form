@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
   const password = searchParams.get('password');
 
   const user: UserData[] = await mysql.query(
-    "SELECT name, email, password FROM user " +
+    "SELECT name, email FROM user " +
     "WHERE user.email = ? AND user.password = ?;",
     [email, password]
   );
