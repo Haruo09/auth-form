@@ -17,7 +17,7 @@ export async function signInRequest({ email, password }: SignInFormData) {
   }).then(response => response.json());
 
 
-  if (user?.email != email || user?.password != password) {  // double checking for ensure it is correct;
+  if (user?.email != email) {  // double checking for ensure it is correct;
     return {
       status: "fail",
       token: null,
@@ -28,9 +28,6 @@ export async function signInRequest({ email, password }: SignInFormData) {
   return {
     status: "success",
     token: uuid(),
-    user: {
-      name: user.name,
-      email: user.email
-    }
+    user
   }
 }
